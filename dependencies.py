@@ -9,5 +9,5 @@ def get_db():
     finally:
         db.close()
 
-from services.player import PlayerCRUD
+from services.players.players_queries import PlayerCRUD
 player_crud_service = PlayerCRUD(db=next(get_db()))
