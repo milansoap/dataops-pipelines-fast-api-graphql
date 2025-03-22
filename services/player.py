@@ -1,7 +1,8 @@
 from sqlalchemy.orm import Session
-from models import Player
+from postgres.models import Player
 # from schemas import PlayerCreate, PlayerUpdate
-from typing import List, Optional
+from typing import List
+
 
 class PlayerCRUD:
     def __init__(self, db: Session):

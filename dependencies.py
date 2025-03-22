@@ -1,5 +1,5 @@
-from config import conn_settings
-from db import PostgresConnection
+from postgres.config import conn_settings
+from postgres.conn import PostgresConnection
 
 def get_db():
     connection = PostgresConnection(conn_settings)

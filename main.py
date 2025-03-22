@@ -1,6 +1,8 @@
 import uvicorn
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
+
+from routers.matches import matches_router
 from routers.player import player_router
 
 app = FastAPI(
@@ -19,6 +21,7 @@ app.add_middleware(
 )
 
 app.include_router(player_router, prefix="/players", tags=["Players"])
+app.include_router(matches_router, prefix="/matches", tags=["Matches"])
 
 if __name__ == "__main__":
     uvicorn.run(app=app, host="0.0.0.0", port=8000, reload=True)

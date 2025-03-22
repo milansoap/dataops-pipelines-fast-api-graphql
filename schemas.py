@@ -1,7 +1,7 @@
 import strawberry
 from typing import List
 from dependencies import player_crud_service
-from models import Player
+from postgres.models import Player
 from sqlalchemy_to_pydantic import sqlalchemy_to_pydantic
 
 PlayerPydantic = sqlalchemy_to_pydantic(Player)
