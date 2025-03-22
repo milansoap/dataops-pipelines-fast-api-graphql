@@ -1,16 +1,7 @@
-from dataclasses import dataclass
-from sqlalchemy import create_engine, text, inspect
+from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
-
-
-@dataclass(frozen=True)
-class ConnectionSettings:
-    """Connection Settings."""
-    host: str
-    database: str
-    username: str
-    password: str
-    port: str = '5432'
+from config import conn_settings
+from urllib.parse import quote_plus
 
 
 class PostgresConnection:
@@ -18,14 +9,18 @@ class PostgresConnection:
     PostgresSQL database connection.
     """
 
-    def __init__(self, conn_settings: ConnectionSettings, echo: bool = False) -> None:
-        self.conn_string = f'postgresql://{conn_settings.username}:{conn_settings.password}@{conn_settings.host}:{conn_settings.port}/{conn_settings.database}'
-        self.engine = create_engine(self.conn_string, echo=echo)
+    def __init__(self, settings: conn_settings, echo: bool = False) -> None:
+        # Encode username and password
+        user = quote_plus(settings.user)
+        password = quote_plus(settings.password)
+        self.conn_string = f'postgresql://{user}:{password}@{settings.host}:{settings.port}/{settings.database}'
+        self.engine = create_engine(self.conn_string, echo=echo, pool_size=50)
         self.SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=self.engine)
 
     def connect(self) -> None:
-        """Estimate connection."""
         self.conn = self.engine.connect()
+        self.conn.close()
+
 
     def get_db(self):
         db = self.SessionLocal()
@@ -33,3 +28,22 @@ class PostgresConnection:
             yield db
         finally:
             db.close()
+
+
+if __name__ == "__main__":
+
+    postgres_conn = PostgresConnection(conn_settings)
+
+    print(conn_settings)
+
+    print("--- Testing connect() method ---")
+    postgres_conn.connect()
+
+    print("\n--- Testing get_db() method ---")
+    db_generator = postgres_conn.get_db()
+    try:
+        db = next(db_generator)
+    except StopIteration:
+        pass
+    except Exception:
+        pass

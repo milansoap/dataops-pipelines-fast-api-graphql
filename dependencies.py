@@ -1,4 +1,3 @@
-# app/dependencies.py
 from config import conn_settings
 from db import PostgresConnection
 

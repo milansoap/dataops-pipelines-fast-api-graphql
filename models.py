@@ -2,7 +2,7 @@
 from sqlalchemy import Column, Integer, String, Float
 from sqlalchemy.ext.declarative import declarative_base
 
-from db import PostgresConnection, ConnectionSettings
+from db import PostgresConnection
 from dependencies import conn_settings
 
 # Initialize the connection
@@ -19,5 +19,5 @@ class Player(Base):
     surname = Column(String, index=True)
     position = Column(String)
     origin = Column(String)
-    height = Column(Float)
+    height = Column(String)  # Changed to String to match the database
     weight = Column(Float)

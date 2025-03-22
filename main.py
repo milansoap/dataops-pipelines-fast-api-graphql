@@ -18,7 +18,6 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# Include user router
 app.include_router(player_router, prefix="/players", tags=["Players"])
 
 if __name__ == "__main__":
